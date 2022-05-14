@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn test
+  /usr/local/bin/node /usr/local/bin/yarn add @superfluid-finance
 
 PATH: 
   /Users/orlandothefraser/cairo_venv/bin:/Users/orlandothefraser/.nix-profile/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/orlandothefraser/.nix-profile/bin:/Users/orlandothefraser/opt/miniconda3/bin:/Users/orlandothefraser/opt/miniconda3/condabin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/orlandothefraser/.local/bin:/Users/orlandothefraser/.local/bin:/Users/orlandothefraser/.local/bin
@@ -14,12 +14,17 @@ Platform:
   darwin arm64
 
 Trace: 
-  SyntaxError: /Users/orlandothefraser/Code/retrox-core/package.json: Unexpected string in JSON at position 308
-      at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+  Error: https://registry.yarnpkg.com/@superfluid-finance: Request "https://registry.yarnpkg.com/@superfluid-finance" returned a 405
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66147:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140883:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141855:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141777:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -32,7 +37,7 @@ npm manifest:
     "scripts": {
       "compile": "hardhat compile",
       "test": "hardhat test" 
-    }
+    },
     "dependencies": {
       "hardhat": "^2.9.5"
     },
