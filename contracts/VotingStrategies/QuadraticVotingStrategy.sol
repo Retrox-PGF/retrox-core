@@ -4,7 +4,7 @@ import "./VotingStrategy.sol";
 
 pragma solidity ^0.8.0;
 
-abstract contract QuadraticVotingStrategy is VotingStrategy {
+contract QuadraticVotingStrategy is VotingStrategy {
     
     function vote(uint256 roundNum, uint256 nominationNum, uint256 tokenAllocation) public override {
         require(badgeHolderVoteStatus[roundNum][msg.sender] == 1, "Not eligible to vote");
