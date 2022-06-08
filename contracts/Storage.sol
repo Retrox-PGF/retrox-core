@@ -2,6 +2,9 @@
 
 pragma solidity ^0.8.0;
 
+// For now we are using the inherited storage pattern to handle the memory layout for delegate calls.
+// This is not ideal and should be changed to a more robust pattern in the future.
+
 contract Storage {
 
     uint256 constant tokensPerBadgeHolder = 100;
@@ -17,8 +20,6 @@ contract Storage {
     }
 
     struct Round {
-        string roundURI;
-        address[] badgeHolders;
         uint256 startBlockTimestamp;
         uint256 fundsCommitted;
         uint256 nominationCounter;
@@ -26,6 +27,9 @@ contract Storage {
         uint256 nominationDuration;
         uint256 votingDuration;
         address votingStrategy;
+        address dispersalStrategy;
+        string roundURI;
+        address[] badgeHolders;
     }
 
     struct Nomination {
