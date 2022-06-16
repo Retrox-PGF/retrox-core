@@ -6,16 +6,17 @@ pragma solidity ^0.8.0;
 
 contract QuadraticVotingStrategy is VotingStrategy {
     
-    function vote(uint256 roundNum, uint256 nominationNum, uint256 tokenAllocation) public override {
+    function vote(uint256 roundNum, uint256 nominationNum, uint256 tokenAllocation) external override {
         require(badgeHolderVoteStatus[roundNum][msg.sender] == 1, "Not eligible to vote");
         Round storage round = rounds[roundNum];
         Nomination storage nomination = nominations[roundNum][nominationNum];
-        uint256 votePower = sqrt(tokenAllocation); // QV vote 
         if(badgeHolderVotes[msg.sender][roundNum][nominationNum] > 0) {
-            nomination.numVotes -= sqrt(badgeHolderVotes[msg.sender][roundNum][nominationNum]);
-            round.totalVotes -= sqrt(badgeHolderVotes[msg.sender][roundNum][nominationNum]);
+            uint256 prevVotePower = sqrt(badgeHolderVotes[msg.sender][roundNum][nominationNum]);
+            nomination.numVotes -= prevVotePower;
+            round.totalVotes -= prevVotePower;
             badgeHolderTokenAmounts[msg.sender][roundNum] -= badgeHolderVotes[msg.sender][roundNum][nominationNum];
         }
+        uint256 votePower = sqrt(tokenAllocation);
         badgeHolderVotes[msg.sender][roundNum][nominationNum] = tokenAllocation;
         round.totalVotes += votePower;
         nomination.numVotes += votePower;
