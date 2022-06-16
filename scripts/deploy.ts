@@ -3,23 +3,17 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
+
+// Binary voting: 0x550DA3378aFeB3a62d90CAd4c882Da2536964C27
 import { ethers } from "hardhat";
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
-
-  // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
-
-  await greeter.deployed();
-
-  console.log("Greeter deployed to:", greeter.address);
+//   const BinaryVotingStrategyFactory = await ethers.getContractFactory(
+//     "BinaryVotingStrategy"
+//   );
+//   const binaryVotingStrategy = await BinaryVotingStrategyFactory.deploy();
+  const Retrox2Factory = await ethers.getContractFactory("Retrox2");
+  const retrox2 = await Retrox2Factory.deploy();
 }
 
 // We recommend this pattern to be able to use async/await everywhere

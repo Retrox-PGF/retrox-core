@@ -3,22 +3,7 @@
 pragma solidity ^0.8.0;
 
 // import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "hardhat/console.sol";
 import "./Storage.sol";
-
-import { 
-    ISuperfluid,
-    ISuperToken 
-} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol"; //"@superfluid-finance/ethereum-monorepo/packages/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
-
-import { 
-    IConstantFlowAgreementV1 
-} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
-
-import {
-    CFAv1Library
-} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
-
 
 interface VotingStrategy {
     function vote(uint256 roundNum, uint256 nominationNum, uint256 tokenAllocation) external;
@@ -27,7 +12,6 @@ interface VotingStrategy {
 interface DispersalStrategy { 
     function disperse(uint256 roundNum) external;
 }
-
 
 contract Retrox2 is Storage {
     function createRound(string memory roundURI, address votingStrategy, address dispersalStrategy, address[] memory badgeHolders, uint256 nominationDuration, uint256 votingDuration) public payable {
@@ -58,6 +42,12 @@ contract Retrox2 is Storage {
         round.nominationCounter++;
     }
 
+    function castVotes(uint256 roundNum, uint256[] memory tokenAllocations) public {
+        for(uint256 i=0; i<tokenAllocations.length; i++) {
+            castVote(roundNum, i, tokenAllocations[i]);
+        }
+    }
+
     function castVote(uint256 roundNum, uint256 nominationNum, uint256 tokenAllocation) public {
         address votingStrategy = rounds[roundNum].votingStrategy;
         require(isContract(votingStrategy), "Voting strategy is not a contract");
@@ -78,6 +68,10 @@ contract Retrox2 is Storage {
 
     function getRoundData(uint256 roundNum) public view returns (Round memory round) {
         return rounds[roundNum];
+    }
+
+    function getNominationData(uint256 roundNum, uint256 nominationNum) public view returns (Nomination memory nomination) {
+        return nominations[roundNum][nominationNum];
     }
 
     function isContract(address _address) internal view returns (bool) {

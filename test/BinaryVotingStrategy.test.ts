@@ -3,7 +3,7 @@ import { expect } from "chai";
 import hre, { ethers, waffle } from "hardhat";
 import { Contract, ContractFactory } from "ethers";
 
-describe("Voting Strategy", function () {
+describe("Binary Voting Strategy", function () {
   let initiator: SignerWithAddress;
   let holder0: SignerWithAddress;
   let holder1: SignerWithAddress;
@@ -11,7 +11,7 @@ describe("Voting Strategy", function () {
   let recipient1: SignerWithAddress;
   let recipient2: SignerWithAddress;
   let retrox2: Contract;
-  let quadraticVotingStrategy: Contract;
+  let binaryVotingStrategy: Contract;
   let retroactiveDispersalStrategy: Contract;
 
   beforeEach(async () => {
@@ -21,10 +21,10 @@ describe("Voting Strategy", function () {
 
     console.log(await provider.getBalance(initiator.address));
 
-    const QuadraticVotingStrategyFactory = await ethers.getContractFactory(
-      "QuadraticVotingStrategy"
+    const BinaryVotingStrategyFactory = await ethers.getContractFactory(
+      "BinaryVotingStrategy"
     );
-    quadraticVotingStrategy = await QuadraticVotingStrategyFactory.deploy();
+    binaryVotingStrategy = await BinaryVotingStrategyFactory.deploy();
     const RetroactiveDispersalStrategyFactory = await ethers.getContractFactory(
       "RetroactiveDispersalStrategy"
     );
@@ -40,7 +40,7 @@ describe("Voting Strategy", function () {
       .connect(initiator)
       .createRound(
         "test round",
-        quadraticVotingStrategy.address,
+        binaryVotingStrategy.address,
         retroactiveDispersalStrategy.address,
         badgeHolders,
         1,
@@ -57,7 +57,7 @@ describe("Voting Strategy", function () {
     expect(roundData.nominationCounter).to.deep.equal(0);
     expect(roundData.totalVotes).to.deep.equal(0);
     expect(roundData.votingStrategy).to.deep.equal(
-      quadraticVotingStrategy.address
+      binaryVotingStrategy.address
     );
 
     await retrox2.connect(initiator).nominate(0, "nom1", recipient1.address, {
@@ -72,14 +72,22 @@ describe("Voting Strategy", function () {
       ethers.utils.parseEther("0.0003")
     );
 
-    await retrox2.connect(holder0).castVote(0, 0, 36);
-    await retrox2.connect(holder1).castVote(0, 0, 100);
-    await retrox2.connect(holder0).castVote(0, 1, 64);
+    await retrox2.connect(holder0).castVotes(0, [1,1]);
+    await retrox2.connect(holder1).castVotes(0, [0,1]);
     roundData = await retrox2.getRoundData(0);
-    expect(roundData.totalVotes).to.deep.equal(
-      36 ** 0.5 + 100 ** 0.5 + 64 ** 0.5
-    );
+    expect(roundData.totalVotes).to.deep.equal(3);
+    let nomination0Data = await retrox2.getNominationData(0, 0);
+    let nomination1Data = await retrox2.getNominationData(0, 1);
+    expect(nomination0Data.numVotes).to.deep.equal(1);
+    expect(nomination1Data.numVotes).to.deep.equal(2);
 
-    await retrox2.connect(initiator).disperseFunds(0);
+    // Changing vote
+    await retrox2.connect(holder0).castVotes(0, [1,0]);
+    nomination1Data = await retrox2.getNominationData(0, 1);
+    expect(nomination1Data.numVotes).to.deep.equal(1);
+
+    // await retrox2.connect(initiator).disperseFunds(0);
+
+
   });
 });

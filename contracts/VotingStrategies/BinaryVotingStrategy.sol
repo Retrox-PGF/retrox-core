@@ -13,11 +13,9 @@ contract BinaryVotingStrategy is VotingStrategy {
         if(badgeHolderVotes[msg.sender][roundNum][nominationNum] == 1) {
             nomination.numVotes -= 1;
             round.totalVotes -= 1;
-            badgeHolderTokenAmounts[msg.sender][roundNum] -= 1;
         }
         badgeHolderVotes[msg.sender][roundNum][nominationNum] = tokenAllocation;
-        round.totalVotes += 1;
-        nomination.numVotes += 1;
-        badgeHolderTokenAmounts[msg.sender][roundNum] += tokenAllocation;
+        round.totalVotes += tokenAllocation;
+        nomination.numVotes += tokenAllocation;
     }
 }
