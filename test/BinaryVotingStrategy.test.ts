@@ -72,22 +72,20 @@ describe("Binary Voting Strategy", function () {
       ethers.utils.parseEther("0.0003")
     );
 
-    await retrox2.connect(holder0).castVotes(0, [1,1]);
-    await retrox2.connect(holder1).castVotes(0, [0,1]);
+    await retrox2.connect(holder0).castVotes(0, [1, 1]);
+    await retrox2.connect(holder1).castVotes(0, [1, 0]);
     roundData = await retrox2.getRoundData(0);
-    expect(roundData.totalVotes).to.deep.equal(3);
-    let nomination0Data = await retrox2.getNominationData(0, 0);
+    expect(roundData.totalVotes).to.deep.equal(4);
+    const nomination0Data = await retrox2.getNominationData(0, 0);
     let nomination1Data = await retrox2.getNominationData(0, 1);
-    expect(nomination0Data.numVotes).to.deep.equal(1);
+    expect(nomination0Data.numVotes).to.deep.equal(2);
     expect(nomination1Data.numVotes).to.deep.equal(2);
 
     // Changing vote
-    await retrox2.connect(holder0).castVotes(0, [1,0]);
+    await retrox2.connect(holder0).castVotes(0, [0, 2]);
     nomination1Data = await retrox2.getNominationData(0, 1);
     expect(nomination1Data.numVotes).to.deep.equal(1);
 
     // await retrox2.connect(initiator).disperseFunds(0);
-
-
   });
 });

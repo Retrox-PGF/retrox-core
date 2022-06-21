@@ -8,12 +8,14 @@
 import { ethers } from "hardhat";
 
 async function main() {
-//   const BinaryVotingStrategyFactory = await ethers.getContractFactory(
-//     "BinaryVotingStrategy"
-//   );
-//   const binaryVotingStrategy = await BinaryVotingStrategyFactory.deploy();
+  // const BinaryVotingStrategyFactory = await ethers.getContractFactory(
+  //   "BinaryVotingStrategy"
+  // );
+  // const binaryVotingStrategy = await BinaryVotingStrategyFactory.deploy();
+  // console.log(binaryVotingStrategy.address);
   const Retrox2Factory = await ethers.getContractFactory("Retrox2");
   const retrox2 = await Retrox2Factory.deploy();
+  console.log(retrox2.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

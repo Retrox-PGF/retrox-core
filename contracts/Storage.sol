@@ -43,9 +43,9 @@ contract Storage {
     mapping(uint256 => mapping (address => uint256)) public badgeHolderVoteStatus; //0 = inelligible, 1 = eligible, 2 = voted
     mapping(uint256  => uint256) public amounts;
     mapping(uint256 => uint256) public flowRates;
-    mapping(address => mapping(uint256 => mapping(uint256 => uint256))) internal badgeHolderVotes;
-    mapping(address => mapping(uint256 => uint256)) internal badgeHolderTokenAmounts;
+    mapping(address => mapping(uint256 => mapping(uint256 => uint256))) public badgeHolderVotes;
+    mapping(address => mapping(uint256 => uint256)) public badgeHolderTokenAmounts;
 
-    uint256 internal roundCounter;
+    uint256 public roundCounter;
  
 }
